@@ -1,28 +1,52 @@
 import React from "react";
+import { useContext } from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
+import { UserContext } from "../../contexts/UserProvider";
 
 export const Header = () => {
-  return (
-    <SHeader>
-      <Sinner>
-        <Stitle>MONEY-BOOK</Stitle>
-        <Snav>
-          <Slist>
-            <Sitem>
-              <Link>ホーム</Link>
-            </Sitem>
-            <Sitem>
-              <Link>ゲストログイン</Link>
-            </Sitem>
-            <Sitem>
-              <Link>新規登録/ログイン</Link>
-            </Sitem>
-          </Slist>
-        </Snav>
-      </Sinner>
-    </SHeader>
-  );
+  const { currentUser } = useContext(UserContext);
+
+  if (currentUser) {
+    return (
+      <SHeader>
+        <Sinner>
+          <Stitle>MONEY-BOOK</Stitle>
+          <Snav>
+            <Slist>
+              <Sitem>
+                <Link>ホーム</Link>
+              </Sitem>
+              <Sitem>
+                <Link>ログアウト</Link>
+              </Sitem>
+            </Slist>
+          </Snav>
+        </Sinner>
+      </SHeader>
+    );
+  } else {
+    return (
+      <SHeader>
+        <Sinner>
+          <Stitle>MONEY-BOOK</Stitle>
+          <Snav>
+            <Slist>
+              <Sitem>
+                <Link>ホーム</Link>
+              </Sitem>
+              <Sitem>
+                <Link>ゲストログイン</Link>
+              </Sitem>
+              <Sitem>
+                <Link>新規登録/ログイン</Link>
+              </Sitem>
+            </Slist>
+          </Snav>
+        </Sinner>
+      </SHeader>
+    );
+  }
 };
 
 const SHeader = styled.header`

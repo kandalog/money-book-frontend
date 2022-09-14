@@ -1,8 +1,8 @@
 import React from "react";
 import styled from "styled-components";
 
-export const SubmitButton = () => {
-  return <Sbutton type="submit">登録</Sbutton>;
+export const SubmitButton = ({ text }) => {
+  return <Sbutton type="submit">{text}</Sbutton>;
 };
 
 const Sbutton = styled.button`
@@ -10,7 +10,7 @@ const Sbutton = styled.button`
   border: none;
   color: #fff;
   padding: 10px 80px;
-  border-radius: 5px;
+  border-radius: 10px 100px / 120px;
   display: block;
   margin: 40px auto 0;
   cursor: pointer;

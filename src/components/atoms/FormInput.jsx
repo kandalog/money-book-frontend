@@ -1,11 +1,11 @@
 import React from "react";
 import styled from "styled-components";
 
-export const FormInput = ({ text, type, onChange }) => {
+export const FormInput = ({ text, type, value, onChange }) => {
   return (
     <SFormInputRow>
       <Slabel htmlFor="">{text}</Slabel>
-      <Sinput type={type} onChange={onChange} />
+      <Sinput type={type} onChange={onChange} value={value} />
     </SFormInputRow>
   );
 };
@@ -21,8 +21,9 @@ const Sinput = styled.input`
   width: 100%;
   font-family: inherit;
   outline: none;
+  font-size: 16px;
+  letter-spacing: 0.05em;
   padding: 10px;
   box-shadow: none;
   background-color: transparent;
-  border-radius: 5px;
 `;
