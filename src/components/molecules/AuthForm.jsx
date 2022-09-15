@@ -16,7 +16,6 @@ const SFormContainer = styled.div`
   padding: 60px;
   margin: 100px auto 0;
   background-color: #fff;
-  height: 500px;
   box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.4);
 `;
 const Stitle = styled.p`

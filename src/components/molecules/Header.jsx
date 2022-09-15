@@ -1,24 +1,30 @@
 import React from "react";
 import { useContext } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { UserContext } from "../../contexts/UserProvider";
+import { gestLogin, logout } from "../../helper/auth";
 
 export const Header = () => {
-  const { currentUser } = useContext(UserContext);
+  const { currentUser, setCurrentUser } = useContext(UserContext);
+  const navigate = useNavigate();
 
   if (currentUser) {
     return (
       <SHeader>
         <Sinner>
-          <Stitle>MONEY-BOOK</Stitle>
+          <Stitle>
+            <Link to="/">MONEY-BOOK</Link>
+          </Stitle>
           <Snav>
             <Slist>
               <Sitem>
-                <Link>ホーム</Link>
+                <Link to="/">ホーム</Link>
               </Sitem>
               <Sitem>
-                <Link>ログアウト</Link>
+                <Link onClick={(e) => logout(e, setCurrentUser, navigate)}>
+                  ログアウト
+                </Link>
               </Sitem>
             </Slist>
           </Snav>
@@ -29,17 +35,21 @@ export const Header = () => {
     return (
       <SHeader>
         <Sinner>
-          <Stitle>MONEY-BOOK</Stitle>
+          <Stitle>
+            <Link to="/">MONEY-BOOK</Link>
+          </Stitle>
           <Snav>
             <Slist>
               <Sitem>
-                <Link>ホーム</Link>
+                <Link to="/">ホーム</Link>
               </Sitem>
               <Sitem>
-                <Link>ゲストログイン</Link>
+                <Link onClick={(e) => gestLogin(e, setCurrentUser, navigate)}>
+                  ゲストログイン
+                </Link>
               </Sitem>
               <Sitem>
-                <Link>新規登録/ログイン</Link>
+                <Link to="/login">新規登録/ログイン</Link>
               </Sitem>
             </Slist>
           </Snav>
@@ -67,7 +77,12 @@ const Sinner = styled.div`
   display: flex;
   align-items: center;
 `;
-const Stitle = styled.h1``;
+const Stitle = styled.h1`
+  a {
+    font-size: 24px;
+    font-weight: bold;
+  }
+`;
 const Snav = styled.nav`
   margin-left: auto;
 `;
@@ -80,5 +95,6 @@ const Sitem = styled.li`
   }
   a {
     line-height: 80px;
+    font-weight: bold;
   }
 `;

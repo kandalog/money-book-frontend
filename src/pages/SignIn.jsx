@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import { useContext } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 
 import { FormInput } from "../components/atoms/FormInput";
@@ -43,6 +43,9 @@ export const SignIn = () => {
           />
           <SubmitButton text="ログイン" />
         </Sform>
+        <SFormLink>
+          <Link to="/signup">新規登録はこちら</Link>
+        </SFormLink>
       </AuthForm>
     </>
   );
@@ -50,4 +53,14 @@ export const SignIn = () => {
 
 const Sform = styled.form`
   margin-top: 50px;
+`;
+
+const SFormLink = styled.div`
+  text-align: center;
+  margin-top: 30px;
+
+  a {
+    color: #3f51b5;
+    font-weight: bold;
+  }
 `;
