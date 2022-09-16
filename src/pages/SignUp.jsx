@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import styled from "styled-components";
 
 import { AuthForm } from "../components/molecules/AuthForm";
@@ -6,29 +6,49 @@ import { Header } from "../components/molecules/Header";
 
 import { FormInput } from "../components/atoms/FormInput";
 import { SubmitButton } from "../components/atoms/SubmitButton";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import axios from "axios";
+import { UserContext } from "../contexts/UserProvider";
+import { enroll } from "../helper/auth";
 
 export const SignUp = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const { setCurrentUser } = useContext(UserContext);
+  const navigate = useNavigate();
+  const [error, setError] = useState();
+
+  const user = {
+    email: email,
+    password: password,
+  };
+
   return (
     <>
       <Header />
+      <StyledErrorMessage>{error}</StyledErrorMessage>
       <AuthForm text="新規登録">
-        <form>
-          <FormInput text="名前" type="text" onChange={() => console.log("")} />
+        <form
+          onSubmit={(e) => enroll(user, setCurrentUser, e, navigate, setError)}
+        >
           <FormInput
             text="メールアドレス"
             type="email"
-            onChange={() => console.log("")}
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <FormInput
             text="パスワード"
             type="password"
-            onChange={() => console.log("")}
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
           />
           <SubmitButton text="登録" />
         </form>
         <SFormLink>
-          <Link to="/login">新規登録はこちら</Link>
+          <Link to="/login">ログインはこちら</Link>
         </SFormLink>
       </AuthForm>
     </>
@@ -43,4 +63,11 @@ const SFormLink = styled.div`
     color: #3f51b5;
     font-weight: bold;
   }
+`;
+
+const StyledErrorMessage = styled.div`
+  background-color: #de6363;
+  color: #fff;
+  font-size: 20px;
+  text-align: center;
 `;
