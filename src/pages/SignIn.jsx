@@ -1,3 +1,4 @@
+import axios from "axios";
 import React from "react";
 import { useState } from "react";
 import { useContext } from "react";
@@ -17,6 +18,8 @@ export const SignIn = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const [error, setError] = useState();
+
   const navigate = useNavigate();
 
   const user = {
@@ -27,8 +30,11 @@ export const SignIn = () => {
   return (
     <>
       <Header />
+      <StyledErrorMessage>{error}</StyledErrorMessage>
       <AuthForm text="ログイン">
-        <Sform onSubmit={(e) => login(user, setCurrentUser, e, navigate)}>
+        <Sform
+          onSubmit={(e) => login(user, setCurrentUser, e, navigate, setError)}
+        >
           <FormInput
             text="メールアドレス"
             type="email"
@@ -63,4 +69,11 @@ const SFormLink = styled.div`
     color: #3f51b5;
     font-weight: bold;
   }
+`;
+
+const StyledErrorMessage = styled.div`
+  background-color: #de6363;
+  color: #fff;
+  font-size: 20px;
+  text-align: center;
 `;
