@@ -8,7 +8,6 @@ import { FormInput } from "../components/atoms/FormInput";
 import { SubmitButton } from "../components/atoms/SubmitButton";
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "axios";
 import { UserContext } from "../contexts/UserProvider";
 import { enroll } from "../helper/auth";
 

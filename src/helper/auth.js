@@ -6,8 +6,7 @@ export const login = async (user, setCurrentUser, e, navigate, setError) => {
   try {
     const getuser = await axios.post("/auth/login", user);
     setCurrentUser(getuser.data);
-    console.log(getuser.data);
-    navigate("/");
+    navigate("/money");
   } catch (err) {
     console.log(err.response.data);
     setError(err.response.data.msg);
@@ -25,10 +24,11 @@ export const enroll = async (user, setCurrentUser, e, navigate, setError) => {
     ) {
       setError("メールアドレスとパスワードを正しく入力してください");
     } else {
+      // 下記の1文で追加
       const newUser = await axios.post("/auth", user);
       setCurrentUser(newUser.data);
       console.log(newUser.data);
-      navigate("/");
+      navigate("/money");
     }
   } catch (err) {
     console.log(err);
