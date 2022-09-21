@@ -71,13 +71,14 @@ export const Money = memo(() => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newPost = {
-      userId: 1,
+      userId: currentUser.id,
       amount: amount,
       date: currentDate,
       memo: memo,
       bool: radio,
     };
     try {
+      console.log(newPost.userId);
       const post = await axios.post("/money", newPost);
       console.log(post);
       setError("");
@@ -95,7 +96,7 @@ export const Money = memo(() => {
     const getIncome = async () => {
       const data = {
         date: currentDate,
-        userId: 1,
+        userId: currentUser.id,
         bool: true,
       };
 
@@ -116,7 +117,7 @@ export const Money = memo(() => {
     const getPyment = async () => {
       const data = {
         date: currentDate,
-        userId: 1,
+        userId: currentUser.id,
         bool: false,
       };
 
