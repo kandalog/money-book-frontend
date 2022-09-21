@@ -19,9 +19,6 @@ export const Header = () => {
           <Snav>
             <Slist>
               <Sitem>
-                <Link to="/">ホーム</Link>
-              </Sitem>
-              <Sitem>
                 <Link onClick={(e) => logout(e, setCurrentUser, navigate)}>
                   ログアウト
                 </Link>
