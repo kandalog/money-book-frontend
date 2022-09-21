@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { memo, useEffect, useState } from "react";
 import { Header } from "../components/molecules/Header";
 
 // import styled from "styled-components";
@@ -9,14 +9,8 @@ import styled from "styled-components";
 import background from "../images/start.jpg";
 import axios from "axios";
 
-export const Money = () => {
+export const Money = memo(() => {
   const { currentUser } = useContext(UserContext);
-  // console.log("money", currentUser)
-  const [listMonth, setListMonth] = useState();
-  const [incomeList, setIncomList] = useState();
-  const [output, setOutputList] = useState();
-
-  // 収支 支出ログに関するstate
 
   // 日付
   const d = new Date();
@@ -25,13 +19,43 @@ export const Money = () => {
   const day = ("0" + d.getDate()).slice(-2);
   const today = `${year}-${month}-${day}`;
 
+  const [incomeList, setIncomeList] = useState();
+  const [paymentList, setPaymentList] = useState();
   const [radio, setRadio] = useState(false);
   const [memo, setMemo] = useState("");
   const [amount, setAmount] = useState(0);
   const [error, setError] = useState("");
+  const [flag, setFlag] = useState("");
+  const [currentMonth, setCurrentMonth] = useState(d.getMonth() + 1);
+  const [currentYear, setCurrentYear] = useState(d.getFullYear());
+
+  // 合計収入額と支出
+  const [saving, setSaving] = useState();
+  const [deposit, setdeposit] = useState();
 
   ///////////////// 関数 /////////////
 
+  // 月を進める
+  const nextMonth = () => {
+    if (currentMonth === 12) {
+      setCurrentMonth(1);
+      setCurrentYear((year) => year + 1);
+    } else {
+      setCurrentMonth((month) => month + 1);
+    }
+  };
+
+  // 月を戻す
+  const prevMonth = () => {
+    if (currentMonth === 1) {
+      setCurrentMonth(12);
+      setCurrentYear((year) => year + -1);
+    } else {
+      setCurrentMonth((month) => month - 1);
+    }
+  };
+
+  // 新しい家計簿データを投稿する
   const handleSubmit = async (e) => {
     e.preventDefault();
     const newPost = {
@@ -47,30 +71,62 @@ export const Money = () => {
       setError("");
       setMemo("");
       setAmount(0);
+      setFlag("flag");
     } catch (err) {
       setError(err.response.data.msg);
       console.log(err.response.data.msg);
     }
   };
 
-  // 収支を全て取得する
+  // 月を整形する
+  const adjustMonth = () => {
+    const stringMonth = String(currentMonth);
+    if (stringMonth.length === 1) {
+      return "0" + stringMonth;
+    } else {
+      return stringMonth;
+    }
+  };
+
+  const currentDate = `${String(currentYear)}-${adjustMonth()}`;
+  // 収入のレコードを取得
   useEffect(() => {
     const getIncome = async () => {
       const data = {
-        date: "2022-09-11",
+        date: currentDate,
         userId: 1,
+        bool: true,
       };
 
       try {
         const res = await axios.post("/money/month", data);
+        setIncomeList(res.data);
         console.log(res.data);
-        setIncomList(res.data);
       } catch (err) {
         console.log(err);
       }
     };
     getIncome();
-  }, [currentUser]);
+  }, [currentMonth, currentYear, currentDate]);
+
+  // 支出のレコードを取得
+  useEffect(() => {
+    const getPyment = async () => {
+      const data = {
+        date: currentDate,
+        userId: 1,
+        bool: false,
+      };
+
+      try {
+        const res = await axios.post("/money/month", data);
+        setPaymentList(res.data);
+      } catch (err) {
+        console.log(err);
+      }
+    };
+    getPyment();
+  }, [currentMonth, currentYear, currentDate]);
 
   return (
     <>
@@ -79,9 +135,15 @@ export const Money = () => {
         <MoneyTopInner>
           <Sdiv>
             <TopList>
-              <TopItem className="left">前の月</TopItem>
-              <TopItem className="center">2021年5月15日</TopItem>
-              <TopItem className="right">次の月</TopItem>
+              <TopItem className="left" onClick={prevMonth}>
+                前の月
+              </TopItem>
+              <TopItem className="center">
+                {currentYear}年{currentMonth}月
+              </TopItem>
+              <TopItem className="right" onClick={nextMonth}>
+                次の月
+              </TopItem>
             </TopList>
           </Sdiv>
           <Sdiv className="second">
@@ -121,8 +183,8 @@ export const Money = () => {
                   name="get"
                   type="radio"
                   onChange={() => setRadio(false)}
+                  checked={radio === false}
                   required
-                  checked
                 />
                 <RadioParts className="radio-part">支出</RadioParts>
               </RadioLabel>
@@ -132,6 +194,7 @@ export const Money = () => {
                   name="get"
                   type="radio"
                   onChange={() => setRadio(true)}
+                  checked={radio === true}
                   required
                 />
                 <RadioParts className="radio-part">収入</RadioParts>
@@ -168,7 +231,7 @@ export const Money = () => {
       <ListArea>
         <ListAreaInner>
           <ListLeft>
-            <ListAreaTitle>収入</ListAreaTitle>
+            {incomeList && incomeList[0] && <ListAreaTitle>収入</ListAreaTitle>}
             <ListAreaDl>
               {incomeList &&
                 incomeList.map((income) => (
@@ -183,21 +246,27 @@ export const Money = () => {
             </ListAreaDl>
           </ListLeft>
           <ListRight>
-            <ListAreaTitle>支出</ListAreaTitle>
+            {paymentList && paymentList[0] && (
+              <ListAreaTitle>支出</ListAreaTitle>
+            )}
             <ListAreaDl>
-              <ListAreaRow>
-                <ListAreaDt>収入</ListAreaDt>
-                <ListAreaDd className="right">
-                  10000<span>円</span>
-                </ListAreaDd>
-              </ListAreaRow>
+              {paymentList &&
+                paymentList.map((payment) => (
+                  <ListAreaRow key={payment.id}>
+                    <ListAreaDt>{payment.memo}</ListAreaDt>
+                    <ListAreaDd className="right">
+                      {payment.amount}
+                      <span>円</span>
+                    </ListAreaDd>
+                  </ListAreaRow>
+                ))}
             </ListAreaDl>
           </ListRight>
         </ListAreaInner>
       </ListArea>
     </>
   );
-};
+});
 
 const MoneyTopImg = styled.div`
   background: url(${background}) center center / cover;
@@ -230,6 +299,7 @@ const TopList = styled.ul`
 `;
 
 const TopItem = styled.li`
+  user-select: none;
   &.left {
     background-color: #333;
     padding: 5px;
@@ -491,11 +561,11 @@ const ListAreaDt = styled.dt``;
 const ListAreaDd = styled.dd`
   letter-spacing: 0.05em;
   &.left {
-    color: #f6686e;
+    color: #48cd8e;
   }
 
   &.right {
-    color: #48cd8e;
+    color: #f6686e;
   }
 `;
 
