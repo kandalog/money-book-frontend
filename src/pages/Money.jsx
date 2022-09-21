@@ -25,15 +25,27 @@ export const Money = memo(() => {
   const [memo, setMemo] = useState("");
   const [amount, setAmount] = useState(0);
   const [error, setError] = useState("");
-  const [flag, setFlag] = useState("");
   const [currentMonth, setCurrentMonth] = useState(d.getMonth() + 1);
   const [currentYear, setCurrentYear] = useState(d.getFullYear());
+  const [flag, setFlag] = useState(true);
 
   // 合計収入額と支出
   const [saving, setSaving] = useState();
   const [deposit, setdeposit] = useState();
 
   ///////////////// 関数 /////////////
+
+  // 月を整形する
+  const adjustMonth = () => {
+    const stringMonth = String(currentMonth);
+    if (stringMonth.length === 1) {
+      return "0" + stringMonth;
+    } else {
+      return stringMonth;
+    }
+  };
+
+  const currentDate = `${String(currentYear)}-${adjustMonth()}`;
 
   // 月を進める
   const nextMonth = () => {
@@ -61,7 +73,7 @@ export const Money = memo(() => {
     const newPost = {
       userId: 1,
       amount: amount,
-      date: today,
+      date: currentDate,
       memo: memo,
       bool: radio,
     };
@@ -71,25 +83,14 @@ export const Money = memo(() => {
       setError("");
       setMemo("");
       setAmount(0);
-      setFlag("flag");
+      setFlag(!flag);
     } catch (err) {
       setError(err.response.data.msg);
       console.log(err.response.data.msg);
     }
   };
 
-  // 月を整形する
-  const adjustMonth = () => {
-    const stringMonth = String(currentMonth);
-    if (stringMonth.length === 1) {
-      return "0" + stringMonth;
-    } else {
-      return stringMonth;
-    }
-  };
-
-  const currentDate = `${String(currentYear)}-${adjustMonth()}`;
-  // 収入のレコードを取得
+  // 収入のレコードを取得 (金額の処理も含む)
   useEffect(() => {
     const getIncome = async () => {
       const data = {
@@ -100,16 +101,17 @@ export const Money = memo(() => {
 
       try {
         const res = await axios.post("/money/month", data);
+        const saving = await axios.post("/money/month/saving", data);
         setIncomeList(res.data);
-        console.log(res.data);
+        setSaving(saving.data);
       } catch (err) {
         console.log(err);
       }
     };
     getIncome();
-  }, [currentMonth, currentYear, currentDate]);
+  }, [currentMonth, currentYear, currentDate, flag]);
 
-  // 支出のレコードを取得
+  // 支出のレコードを取得 (金額の処理も含む)
   useEffect(() => {
     const getPyment = async () => {
       const data = {
@@ -120,13 +122,15 @@ export const Money = memo(() => {
 
       try {
         const res = await axios.post("/money/month", data);
+        const saving = await axios.post("/money/month/saving", data);
         setPaymentList(res.data);
+        setdeposit(saving.data);
       } catch (err) {
         console.log(err);
       }
     };
     getPyment();
-  }, [currentMonth, currentYear, currentDate]);
+  }, [currentMonth, currentYear, currentDate, flag]);
 
   return (
     <>
@@ -148,7 +152,7 @@ export const Money = memo(() => {
           </Sdiv>
           <Sdiv className="second">
             <Sdiv>
-              <Balance>8000円</Balance>
+              <Balance>{saving - deposit}円</Balance>
             </Sdiv>
           </Sdiv>
           <Sdiv className="third">
@@ -157,13 +161,15 @@ export const Money = memo(() => {
                 <BottomItem className="left">
                   <BottomItemLabel>収入</BottomItemLabel>
                   <BottomItemYen>
-                    +50000<span>円</span>
+                    +{saving}
+                    <span>円</span>
                   </BottomItemYen>
                 </BottomItem>
                 <BottomItem className="right">
                   <BottomItemLabel>支出</BottomItemLabel>
                   <BottomItemYen>
-                    -20000<span>円</span>
+                    -{deposit}
+                    <span>円</span>
                   </BottomItemYen>
                 </BottomItem>
               </BottomList>
