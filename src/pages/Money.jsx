@@ -132,6 +132,14 @@ export const Money = memo(() => {
     getPyment();
   }, [currentMonth, currentYear, currentDate, flag]);
 
+  const handleOnDelete = async (id) => {
+    const body = {
+      id: id,
+    };
+    await axios.delete("/money", { data: body });
+    setFlag(!flag);
+  };
+
   return (
     <>
       <Header />
@@ -244,6 +252,9 @@ export const Money = memo(() => {
                   <ListAreaRow key={income.id}>
                     <ListAreaDt>{income.memo}</ListAreaDt>
                     <ListAreaDd className="left">
+                      <DeleteButton onClick={() => handleOnDelete(income.id)}>
+                        削除
+                      </DeleteButton>
                       {income.amount}
                       <span>円</span>
                     </ListAreaDd>
@@ -261,6 +272,9 @@ export const Money = memo(() => {
                   <ListAreaRow key={payment.id}>
                     <ListAreaDt>{payment.memo}</ListAreaDt>
                     <ListAreaDd className="right">
+                      <DeleteButton onClick={() => handleOnDelete(payment.id)}>
+                        削除
+                      </DeleteButton>
                       {payment.amount}
                       <span>円</span>
                     </ListAreaDd>
@@ -306,9 +320,12 @@ const TopList = styled.ul`
 
 const TopItem = styled.li`
   user-select: none;
+
   &.left {
     background-color: #333;
-    padding: 5px;
+    width: 60px;
+    text-align: center;
+    line-height: 30px;
     border-radius: 10px 100px / 120px;
     cursor: pointer;
     transition: 0.3s;
@@ -324,7 +341,9 @@ const TopItem = styled.li`
 
   &.right {
     background-color: #333;
-    padding: 5px;
+    width: 60px;
+    text-align: center;
+    line-height: 35px;
     border-radius: 100px 10px / 120px;
     cursor: pointer;
     transition: 0.3s;
@@ -566,6 +585,7 @@ const ListAreaDt = styled.dt``;
 
 const ListAreaDd = styled.dd`
   letter-spacing: 0.05em;
+  position: relative;
   &.left {
     color: #48cd8e;
   }
@@ -573,6 +593,18 @@ const ListAreaDd = styled.dd`
   &.right {
     color: #f6686e;
   }
+`;
+
+const DeleteButton = styled.button`
+  position: absolute;
+  top: -17px;
+  right: -6px;
+  font-size: 11px;
+  color: #f34141;
+  background-color: transparent;
+  border: none;
+  white-space: nowrap;
+  cursor: pointer;
 `;
 
 /////////// error //////////
