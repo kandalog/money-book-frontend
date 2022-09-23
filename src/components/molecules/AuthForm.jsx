@@ -17,6 +17,9 @@ const SFormContainer = styled.div`
   margin: 100px auto 0;
   background-color: #fff;
   box-shadow: 3px 3px 10px 0px rgba(0, 0, 0, 0.4);
+  @media screen and (max-width: 767px) {
+    width: 90%;
+  }
 `;
 const Stitle = styled.p`
   font-size: 24px;

@@ -1,7 +1,6 @@
 import React, { memo, useEffect, useState } from "react";
 import { Header } from "../components/molecules/Header";
 
-// import styled from "styled-components";
 import { useContext } from "react";
 import { UserContext } from "../contexts/UserProvider";
 import styled from "styled-components";
@@ -14,10 +13,6 @@ export const Money = memo(() => {
 
   // 日付
   const d = new Date();
-  const year = d.getFullYear();
-  const month = ("0" + (d.getMonth() + 1)).slice(-2);
-  const day = ("0" + d.getDate()).slice(-2);
-  const today = `${year}-${month}-${day}`;
 
   const [incomeList, setIncomeList] = useState();
   const [paymentList, setPaymentList] = useState();
@@ -110,7 +105,7 @@ export const Money = memo(() => {
       }
     };
     getIncome();
-  }, [currentMonth, currentYear, currentDate, flag]);
+  }, [currentMonth, currentYear, currentDate, flag, currentUser.id]);
 
   // 支出のレコードを取得 (金額の処理も含む)
   useEffect(() => {
@@ -131,7 +126,7 @@ export const Money = memo(() => {
       }
     };
     getPyment();
-  }, [currentMonth, currentYear, currentDate, flag]);
+  }, [currentMonth, currentYear, currentDate, flag, currentUser.id]);
 
   const handleOnDelete = async (id) => {
     const body = {
@@ -237,12 +232,13 @@ export const Money = memo(() => {
                 <span className="parts">円</span>
               </MoneyUl>
             </Sdiv>
-            <Sdiv>
+            <Sdiv className="button">
               <Sbutton>追加</Sbutton>
             </Sdiv>
           </EnrollInner>
         </form>
       </MoneyEnrollArea>
+
       <ListArea>
         <ListAreaInner>
           <ListLeft>
@@ -305,12 +301,18 @@ const Sdiv = styled.div`
   &.third {
     margin-top: 20px;
   }
+
+  &.button {
+    @media screen and (max-width: 767px) {
+      text-align: right;
+    }
+  }
 `;
 
 const MoneyTopInner = styled.div`
   width: 600px;
+  max-width: 100%;
   margin: 0 auto;
-  /* border: 1px solid red; */
 `;
 
 const TopList = styled.ul`
@@ -376,6 +378,9 @@ const BottomList = styled.ul`
   display: flex;
   width: fit-content;
   margin: 0 auto;
+  @media screen and (max-width: 767px) {
+    display: block;
+  }
 `;
 
 const BottomItem = styled.li`
@@ -395,6 +400,10 @@ const BottomItem = styled.li`
 
   & + & {
     margin-left: 50px;
+    @media screen and (max-width: 767px) {
+      margin-left: 0;
+      margin-top: 20px;
+    }
   }
 `;
 
@@ -416,8 +425,8 @@ const BottomItemYen = styled.p`
 `;
 
 const MoneyEnrollArea = styled.div`
-  height: 80px;
   background-color: #f3eefb;
+  padding: 20px 0;
 
   form {
     height: inherit;
@@ -430,11 +439,22 @@ const RadioWrap = styled.div`
   display: inline-flex;
   border-radius: 1px;
   color: #333;
+  @media screen and (max-width: 767px) {
+    display: flex;
+    justify-content: center;
+    transform: translateX(-10px);
+  }
 `;
 
 const RadioLabel = styled.label`
   position: relative;
   cursor: pointer;
+
+  span {
+    @media screen and (max-width: 767px) {
+      margin-left: 20px;
+    }
+  }
 `;
 
 const RadioInput = styled.input`
@@ -531,6 +551,9 @@ const EnrollInner = styled.div`
   align-items: center;
   height: inherit;
   width: fit-content;
+  @media screen and (max-width: 767px) {
+    display: block;
+  }
 
   span {
     white-space: nowrap;
@@ -539,6 +562,10 @@ const EnrollInner = styled.div`
   div {
     &:not(:first-of-type) {
       margin-left: 20px;
+      @media screen and (max-width: 767px) {
+        margin-left: 0;
+        margin-top: 10px;
+      }
     }
   }
 `;
@@ -549,6 +576,11 @@ const ListAreaInner = styled.div`
   display: flex;
   justify-content: center;
   margin-top: 20px;
+  @media screen and (max-width: 767px) {
+    display: block;
+    width: 80%;
+    margin: 0 auto;
+  }
 `;
 
 const ListAreaTitle = styled.p`
@@ -561,12 +593,23 @@ const ListAreaTitle = styled.p`
 const ListArea = styled.div``;
 
 const ListLeft = styled.div`
+  @media screen and (max-width: 767px) {
+    margin-top: 10px;
+  }
+
   div {
     margin-right: 20px;
+    @media screen and (max-width: 767px) {
+      margin: 0;
+    }
   }
 `;
 
-const ListRight = styled.div``;
+const ListRight = styled.div`
+  @media screen and (max-width: 767px) {
+    margin-top: 30px;
+  }
+`;
 
 const ListAreaDl = styled.dl``;
 
@@ -576,6 +619,10 @@ const ListAreaRow = styled.div`
   width: 300px;
   border-bottom: 1px solid #ddd;
   padding-bottom: 10px;
+
+  @media screen and (max-width: 767px) {
+    width: 100%;
+  }
 
   &:not(:first-of-type) {
     margin-top: 20px;

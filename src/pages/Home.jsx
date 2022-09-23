@@ -37,6 +37,10 @@ const HomeTitle = styled.p`
   font-weight: bold;
   letter-spacing: 0.15em;
   white-space: nowrap;
+  @media screen and (max-width: 767px) {
+    font-size: 40px;
+    overflow: hidden;
+  }
 `;
 
 const HomeSubTitle = styled.p`

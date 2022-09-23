@@ -60,6 +60,9 @@ const SHeader = styled.header`
   height: 80px;
   background-color: #3f51b5;
   color: #fff;
+  @media screen and (max-width: 767px) {
+    height: 60px;
+  }
 
   a {
     color: #fff;
@@ -73,13 +76,20 @@ const Sinner = styled.div`
   height: inherit;
   display: flex;
   align-items: center;
+  @media screen and (max-width: 767px) {
+    padding: 0 10px;
+  }
 `;
 const Stitle = styled.h1`
   a {
     font-size: 24px;
     font-weight: bold;
+    @media screen and (max-width: 767px) {
+      font-size: 12px;
+    }
   }
 `;
+
 const Snav = styled.nav`
   margin-left: auto;
 `;
@@ -89,9 +99,15 @@ const Slist = styled.ul`
 const Sitem = styled.li`
   & + & {
     margin-left: 20px;
+    @media screen and (max-width: 767px) {
+      margin-left: 10px;
+    }
   }
   a {
     line-height: 80px;
     font-weight: bold;
+    @media screen and (max-width: 767px) {
+      font-size: 12px;
+    }
   }
 `;
