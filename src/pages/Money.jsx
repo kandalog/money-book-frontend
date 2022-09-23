@@ -344,7 +344,7 @@ const TopItem = styled.li`
     background-color: #333;
     width: 60px;
     text-align: center;
-    line-height: 30px;
+    line-height: 35px;
     border-radius: 10px 100px / 120px;
     cursor: pointer;
     transition: 0.3s;
