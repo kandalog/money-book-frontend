@@ -552,6 +552,7 @@ const Sbutton = styled.button`
   color: #fff;
   border: none;
   padding: 5px 20px;
+  line-height: 25px;
   margin-left: 5px;
   border-radius: 50% 20% / 10% 40%;
   transition: 0.3s;
@@ -569,6 +570,7 @@ const EnrollInner = styled.div`
   width: fit-content;
   @media screen and (max-width: 767px) {
     display: block;
+    width: 60%;
   }
 
   span {

@@ -22,6 +22,11 @@ const HomeImage = styled.div`
   width: 100vw;
   height: calc(100vh - 80px);
   background: url(${background}) center center / cover;
+  @media screen and (max-width: 767px) {
+    height: calc(100vh - 60px);
+    max-height: 100%;
+    overflow: hidden;
+  }
 `;
 
 const HomeText = styled.div`
