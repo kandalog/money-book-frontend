@@ -4,8 +4,8 @@ import axios from "axios";
 export const login = async (user, setCurrentUser, e, navigate, setError) => {
   e.preventDefault();
   try {
-    const getuser = await axios.post("/auth/login", user);
-    setCurrentUser(getuser.data);
+    const getUser = await axios.post("/auth/login", user);
+    setCurrentUser(getUser.data);
     navigate("/money");
   } catch (err) {
     console.log(err.response.data);
@@ -45,14 +45,15 @@ export const logout = (e, setCurrentUser, navigate) => {
 
 export const gestLogin = async (e, setCurrentUser, navigate) => {
   e.preventDefault();
+  const user = {
+    email: "gest@gmail.com",
+    password: "gestpassword",
+  };
   try {
-    const user = await axios.post("/auth/login", {
-      email: "gest@gmail.com",
-      password: "gestpassword",
-    });
-    setCurrentUser(user);
-    console.log(user);
-    navigate("/");
+    const gest = await axios.post("/auth/login", user);
+    setCurrentUser(gest.data);
+    console.log(gest.data);
+    navigate("/money");
   } catch (err) {
     console.log(err);
   }
