@@ -73,8 +73,10 @@ export const Money = memo(() => {
       bool: radio,
     };
     try {
-      console.log(newPost.userId);
-      const post = await axios.post("/money", newPost);
+      const post = await axios.post(
+        "https://money-book-backend.herokuapp.com/api/money",
+        newPost
+      );
       console.log(post);
       setError("");
       setMemo("");
@@ -96,8 +98,14 @@ export const Money = memo(() => {
       };
 
       try {
-        const res = await axios.post("/money/month", data);
-        const saving = await axios.post("/money/month/saving", data);
+        const res = await axios.post(
+          "https://money-book-backend.herokuapp.com/api/money/month",
+          data
+        );
+        const saving = await axios.post(
+          "https://money-book-backend.herokuapp.com/api/money/month/saving",
+          data
+        );
         setIncomeList(res.data);
         setSaving(saving.data);
       } catch (err) {
@@ -117,8 +125,14 @@ export const Money = memo(() => {
       };
 
       try {
-        const res = await axios.post("/money/month", data);
-        const saving = await axios.post("/money/month/saving", data);
+        const res = await axios.post(
+          "https://money-book-backend.herokuapp.com/api/money/month",
+          data
+        );
+        const saving = await axios.post(
+          "https://money-book-backend.herokuapp.com/api/money/month/saving",
+          data
+        );
         setPaymentList(res.data);
         setdeposit(saving.data);
       } catch (err) {
@@ -132,7 +146,9 @@ export const Money = memo(() => {
     const body = {
       id: id,
     };
-    await axios.delete("/money", { data: body });
+    await axios.delete("https://money-book-backend.herokuapp.com/api/money", {
+      data: body,
+    });
     setFlag(!flag);
   };
 
